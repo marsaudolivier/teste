@@ -1,0 +1,173 @@
+//background colors theme
+body {
+  background-color: $light;
+}
+//Add font style
+.exo{
+  font-family: "exo-2-variable", sans-serif;
+  font-variation-settings: "wght" 400;
+}
+.merri{
+  font-family: "merriweather", serif;
+  font-weight: 400;
+}
+//Picture for navbar
+nav img {
+  width: 120px;
+  height: 75px;
+}
+//Title style
+h1 {
+  font-size: 80px;
+  color: $secondary;
+  display: inline-block;
+  -webkit-text-stroke: 1px $success;
+  padding: 5px;
+  font-style: normal;
+}
+h2 {
+  color: $secondary;
+  text-align: center;
+  font-size: 120px;
+  font-style: normal;
+  font-weight: 200;
+  line-height: normal;
+  text-transform: uppercase;
+}
+h3 {
+  color: $secondary;
+  font-size: 28px;
+  font-style: normal;
+  text-transform: uppercase;
+  -webkit-text-stroke: 1px $primary;
+  padding: 5px;
+}
+h4{
+  color: $secondary;
+  font-size: 40px;
+  -webkit-text-stroke: 1px $primary;
+  padding: 5px;
+}
+//Footer style social link
+.social {
+  width: 50px;
+  height: 50px;
+}
+//definite container style 
+.Container_Primary {
+  background-color: $dark;
+  border-radius: 25px;
+  border: 1px solid $primary;
+}
+// Media query for title
+@media screen and (max-width: 1200px) {
+  h4 {
+    font-size: 30px;
+  }
+}
+@media screen and (max-width: 995px) {
+  h2 {
+    font-size: 80px;
+  }
+  h4 {
+    font-size: 25px;
+  }
+}
+@media screen and (max-width: 850px) {
+  h1 {
+    font-size: 40px;
+  }
+  h2 {
+    font-size: 60px;
+  }
+  h4 {
+    font-size: 20px;
+  }
+}
+@media screen and (max-width: 600px) {
+  h1 {
+    font-size: 30px;
+  }
+  h2 {
+    font-size: 40px;
+  }
+  h4 {
+    font-size: 15px;
+  }
+}
+@media screen and (max-width: 450px) {
+  h1 {
+    font-size: 20px;
+  }
+  h2 {
+    font-size: 30px;
+  }
+  h4 {
+    font-size: 10px;
+  }
+}
+//Style for ellipse picture
+.ellipse{
+  width: 200px;
+  height: 200px;
+}
+.ellipse_contact{
+  width: 150px;
+  height: 150px;
+}
+@media screen and (max-width: 1500px) {
+  .ellipse{
+    width: 150px;
+    height: 150px;
+  }
+}
+@media screen and (max-width: 1000px) {
+  .ellipse{
+    width: 100px;
+    height: 100px;
+  }
+}
+.recipes_card{
+  border-radius: 25px;
+  border: 1px solid $primary;
+  margin: 10px;
+  padding: 10px;
+}
+.recipes_image{
+  border-radius: 25px;
+  width: 200px;
+  height: 200px;
+}
+@media screen and (max-width: 1500px) {
+  .recipes_image{
+    border-radius: 25px;
+    width: 150px;
+    height: 150px;
+  }
+}
+@media screen and (max-width: 1000px) {
+  .recipes_image{
+    border-radius: 25px;
+    width: 100px;
+    height: 100px;
+  }
+}
+.container_recipe_time{
+  background-color: $light;
+  border-radius: 25px;
+}
+.recipe_image{
+  border-radius: 25px;
+}
+.recipe_title{
+  font-size: 60px;
+  color: $secondary;
+  display: inline-block;
+  -webkit-text-stroke: 1px $success;
+  padding: 5px;
+  font-style: normal;
+}
+.red{
+  color: red;
+  font-size: 26px;
+}

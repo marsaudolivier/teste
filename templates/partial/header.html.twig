@@ -1,0 +1,44 @@
+<!--header template-->
+<header>
+	<nav class="navbar navbar-expand-lg bg-primary exo" data-bs-theme="dark">
+		<div class="container-fluid d-flex justify-content-between align-items-center">
+			<a href="../">
+				<img src="{{ asset('images/logo.png') }}" alt="Logo" class="align-self-center">
+			</a>
+			<div class="mx-auto text-center">
+				<h1 class="p-2">Sandrine Coupart</h1>
+			</div>
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarColor01">
+				<ul class="navbar-nav ms-auto">
+					<li class="nav-item test">
+						<a class="nav-link active" href="../">Index
+							<span class="visually-hidden">(current)</span>
+						</a>
+					</li>
+					<li class="nav-item test">
+						<a class="nav-link" href="/recettes">Recettes</a>
+					</li>
+					<li class="nav-item test">
+						<a class="nav-link" href="/contact">Contact</a>
+					</li>
+					<li class="nav-itemt test">
+						<a class="nav-link" href="/inscription">Inscription</a>
+					</li>
+					<li class="nav-itemt test">
+						{% if app.user %}
+							<a href="/logout" class="btn btn-dark">Déconnexion</a>
+							{% if app.user.roles is not empty and "ROLE_ADMIN" in app.user.roles %}
+							<a href="/admin" class="btn btn-danger">Administration</a>
+							{% endif %}
+						{% else %}
+							<a class="nav-link" href="/connexion">Connexion</a>
+						{% endif %}
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+</header>

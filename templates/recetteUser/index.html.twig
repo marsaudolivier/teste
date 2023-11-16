@@ -1,0 +1,137 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Recettes
+{% endblock %}
+{% block body %}
+	<div class="container-fluid p-5">
+		<div class="Container_Primary p-4 exo">
+			<h2>Nos recettes</h2>
+		</div>
+		<div class="Container_Primary p-4 exo mt-4">
+			<div class="row text-center ">
+				<h3 class="recipe_title merri">{{ recipe.title }}
+					{# Calcul pour la note  #}
+				</br>Note :{% set total = 0 %}
+				{% set count = 0 %}
+						{% set voted = 0 %}
+				{% for notice in recipe.notices %}
+					{% set total = total + notice.note %}
+					{% set count = count + 1 %}
+				{% endfor %}
+				{% if count > 0 %}
+					{# Total / nombre de note = note arrondie #}
+					<img id="globalRating" src="{{ asset('images/etoile' ~ (total / count) | round ~ '.svg') }}" alt="Logo" class="align-self-center">
+				{% endif %}
+					
+				{% for note in recipe.notices %}
+				{% if app.user.id == note.user %}
+					<p> Vous avez déja voté pour cette recette {{ app.user.firstname }} {{ app.user.lastname }} </p>
+						{% set voted = "voted" %}
+					{% else %}
+				{% endif %}	
+				{% endfor %}
+				{% if voted != "voted" %}	
+				<div id="addNoteForm">
+					<input type="number" id="newNote" min="1" max="5" step="0.1" placeholder="Ajouter une note (1-5)">
+					<input type="text" id="newComment"  placeholder="Ajouter un commentaire">
+					<button id="addNoteButton">Ajouter une note</button>
+				</div>
+				{% endif %}
+				<div class="d-flex">
+					<div class="row text-center">
+						<div class="col-9">
+							<h4>Description :</h4>
+							<p>{{ recipe.description   | raw }}</p>
+							<div class="container_recipe_time">
+								<p>Temps Total :{{ recipe.TotalTime }}</p>
+								<div class="d-flex justify-content-around">
+									<div>
+										<p>Temps de préparation :</p>
+										<p>{{ recipe.PreparationTime }}</p>
+									</div>
+									<div>
+										<p>Repos :</p>
+										<p>{{ recipe.TimeOfRest }}</p>
+									</div>
+									<div>
+										<p>Cuissons :</p>
+										<p>{{ recipe.CookingTime }}</p>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-2 mt-2">
+							<img src="/uploads/recipes/{{ recipe.image }}" class="recipe_image h-75 w-100"></img>
+					</div>
+					<div class="row mt-4">
+						<div class="col-4">
+							{% for ingredient in recipe.ingredien %}
+								<li>{{ ingredient.name }}</li>
+							{% endfor %}
+						</div>
+						<div class="col-8 container_recipe_time">
+							<h4>Etapes</h4>
+							<p>{{ recipe.steps  | raw }}</p>
+						</div>
+					</div>
+					<div>
+						<div class="d-flex justify-content-around mt-5">
+							<div>
+								<H4>
+									ALLERGENES:</H4>
+								{% for allergen in recipe.allergen %}
+									<li class="red merri">{{ allergen }}</li>
+								{% endfor %}
+							</div>
+							<div>
+								<H4>TYPES DE RéGIME :</H4>
+								{% for diets in recipe.diets %}
+									<li class="red merri">{{ diets }}</li>
+								{% endfor %}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block javascripts %}
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	<script>
+		document.getElementById("addNoteButton").addEventListener("click", function () {
+const newNote = parseInt(document.getElementById("newNote").value);
+const newComment = document.getElementById("newComment").value;
+const userid = {{app.user.id}};
+const newid = {{ recipe.id }};
+if (newNote >= 1 && newNote <= 5) {
+const recipeId = {{ recipe.id }};
+axios.post(`/api/recipe/${recipeId}/add-note/${newNote}/${userid}/${newComment}`, {
+notes: newNote,
+id: newid,
+users: userid,
+comment: newComment
+}).then(function (response) { // récupération de l'objet data
+let objetJson = response.data;
+// verrif qu'il sagit bien d'un objet json
+if (objetJson.data && Array.isArray(objetJson.data)) { // calcul de la somme
+const somme = objetJson.data.reduce((acc, valeur) => acc + valeur, 0);
+// calcul de la moyenne
+const moyenne = somme / objetJson.data.length;
+// arrondi de la moyenne
+const moyenneArrondie = Math.round(moyenne);
+// affichage de la moyenne dans la div etoile
+document.getElementById("globalRating").src = `/images/etoile${moyenneArrondie}.svg`;
+document.getElementById("addNoteForm").innerHTML = `<p>Merci d'avoir voté pour notre recette</p>`;
+}
+
+}).catch(function (error) {
+console.error("Une erreur s'est produite lors de l'ajout de la note : " + error);
+});
+} else {
+alert("Veuillez entrer une note valide entre 1 et 5.");
+}
+});
+	</script>
+{% endblock %}
