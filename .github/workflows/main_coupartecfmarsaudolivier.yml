@@ -63,4 +63,4 @@ jobs:
           app-name: 'coupartecfmarsaudolivier'
           slot-name: 'Production'
           package: .
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_31D99991A8274D7983F7B83073BD45E6 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_225F2D8475FA4DBFB6C020C0F90C938B }}
