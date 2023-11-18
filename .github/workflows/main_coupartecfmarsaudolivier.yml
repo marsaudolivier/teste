@@ -1,66 +1,118 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
+# PHP as Linux Web App on Azure
+# Build, package and deploy your PHP project to Azure Linux Web App.
+# Add steps that run tests and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/php
 
-name: Build and deploy PHP app to Azure Web App - coupartecfmarsaudolivier
+trigger:
+- master
 
-on:
-  push:
-    branches:
-      - main
-  workflow_dispatch:
+variables:
+  # Azure Resource Manager connection created during pipeline creation
+  azureSubscription: '##ID OF THE SERVICE CONNECTION##'
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
+  # Environment name
+  environmentName: '##NAME OF THE ENVIRONMENT##'
 
+  # Web app name
+  webAppName: '##NAME OF THE WEB APP##'
+
+  # Agent VM image name
+  vmImageName: 'Ubuntu-20.04'
+
+  # Root folder under which your |
+  rootFolder: $(System.DefaultWorkingDirectory)
+
+stages:
+- stage: Build
+  displayName: Build stage
+  variables:
+    phpVersion: '7.4'
+  jobs:
+  - job: BuildJob
+    pool:
+      vmImage: $(vmImageName)
     steps:
-      - uses: actions/checkout@v4
+- script: |
+    sudo update-alternatives --set php /usr/bin/php$(phpVersion)
+    sudo update-alternatives --set phar /usr/bin/phar$(phpVersion)
+    sudo update-alternatives --set phpdbg /usr/bin/phpdbg$(phpVersion)
+    sudo update-alternatives --set php-cgi /usr/bin/php-cgi$(phpVersion)
+    sudo update-alternatives --set phar.phar /usr/bin/phar.phar$(phpVersion)
+    php -version
+  workingDirectory: $(rootFolder)
+  displayName: 'Use PHP version $(phpVersion)'
 
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.2'
+- script: |
+    sudo pecl config-set php_ini /etc/php/7.4/cli/php.ini
+    sudo pecl config-set ext_dir /usr/lib/php/20190902/
+    sudo pecl config-set bin_dir /usr/bin/
+    sudo pecl config-set php_bin /usr/bin/php7.4
+    sudo pecl config-set php_suffix 7.4
+    sudo pecl channel-update pecl.php.net
+    sudo pecl install sqlsrv-5.8.1
+    sudo pecl install pdo_sqlsrv-5.8.1
+  displayName: PECL install sqlsrv
 
-      - name: Check if composer.json exists
-        id: check_files
-        uses: andstor/file-existence-action@v1
-        with:
-          files: 'composer.json'
+- script: |
+    sudo bash -c "echo extension=sqlsrv.so > /etc/php/7.4/cli/conf.d/99-sqlsrv.ini"
+    sudo bash -c "echo extension=pdo_sqlsrv.so > /etc/php/7.4/cli/conf.d/99-sqlsrv.ini"
+    displayName: 'SQLSRV modify ini files'
 
-      - name: Run composer install if composer.json exists
-        if: steps.check_files.outputs.files_exists == 'true'
-        run: composer validate --no-check-publish && composer install --prefer-dist --no-progress
+  - script: php -i
+    workingDirectory: $(rootFolder)
+    displayName: 'PHPinfo()'
 
-      - name: Zip artifact for deployment
-        run: zip release.zip ./* -r
+  - script: |
+    curl -sS https://getcomposer.org/installer | php
+    php composer.phar install --no-dev --optimize-autoloader
+    php composer.phar dump-env %APP_ENV%
+    php bin/console cache:clear
+    workingDirectory: $(rootFolder)
+    displayName: 'Composer install'
 
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v3
-        with:
-          name: php-app
-          path: release.zip
+  - script: curl -sS https://get.symfony.com/cli/installer | bash
+    workingDirectory: $(rootFolder)
+    displayName: 'Install SymfonyCLI'
 
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    environment:
-      name: 'Production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-    
-    steps:
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v3
-        with:
-          name: php-app
+  - script: /home/vsts/.symfony/bin/symfony check:requirements
+    workingDirectory: $(rootFolder)
+    displayName: 'Symfony check requirements'
 
-      - name: Unzip artifact for deployment
-        run: unzip release.zip
-      
-      - name: 'Deploy to Azure Web App'
-        uses: azure/webapps-deploy@v2
-        id: deploy-to-webapp
-        with:
-          app-name: 'coupartecfmarsaudolivier'
-          slot-name: 'Production'
-          package: .
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_225F2D8475FA4DBFB6C020C0F90C938B }}
+  - script: php bin/console doctrine:migrations:migrate --no-interaction
+    workingDirectory: $(rootFolder)
+    displayName: 'Update database'
+
+  - task: ArchiveFiles@2
+    displayName: 'Archive files'
+    inputs:
+      rootFolderOrFile: '$(rootFolder)'
+      includeRootFolder: false
+      archiveType: zip
+      archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+      replaceExistingArchive: true
+
+  - upload: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+    displayName: 'Upload package'
+    artifact: drop
+
+  - stage: Deploy
+    displayName: 'Deploy Web App'
+    dependsOn: Build
+    condition: succeeded()
+    jobs:
+  - deployment: DeploymentJob
+    pool:
+      vmImage: $(vmImageName)
+    environment: $(environmentName)
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: AzureWebApp@1
+            displayName: 'Deploy Azure Web App : $(webAppName)'
+            inputs:
+              azureSubscription: $(azureSubscription)
+              appName: $(webAppName)
+              appType: webAppLinux
+              package: $(Pipeline.Workspace)/drop/$(Build.BuildId).zip
+``
