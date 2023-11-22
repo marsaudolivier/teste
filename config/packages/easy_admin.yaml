@@ -1,0 +1,10 @@
+easy_admin:
+    entities:
+        Recipes:
+            class: App\Entity\Recipes
+            form:
+                autocomplete: true
+        Ingredients:
+            class: App\Entity\Ingredients
+            form:
+                autocomplete: true
