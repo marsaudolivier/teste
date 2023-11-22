@@ -7,7 +7,3 @@ controllers:
 index:
     path: /index
     controller: App\Controller\RecettesController::index
-admin:
-    path: /admin
-    controller: App\Controller\AdminController::index
-    schemes:    [https]
