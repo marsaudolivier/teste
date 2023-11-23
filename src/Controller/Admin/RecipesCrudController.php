@@ -50,17 +50,14 @@ class RecipesCrudController extends AbstractCrudController
             AssociationField::new('diets')
             ->setFormTypeOption('multiple', true)
             ->setFormTypeOption('label', 'Régime alimentaires')        
-            ->autocomplete()
             ->setHelp('Sélectionnez un ou plusieurs régimes alimentaires'),
             AssociationField::new('allergen')
             ->setFormTypeOption('multiple', true)
             ->setFormTypeOption('label', 'Allergènes')
-            ->autocomplete()
             ->setHelp('Sélectionnez un ou plusieurs allergènes'),
             AssociationField::new('ingredien')
             ->setFormTypeOption('multiple', true)
             ->setFormTypeOption('label', 'Ingrédients')
-            ->autocomplete()
             ->setHelp('Sélectionnez un ou plusieurs Ingrédients'),
         ];
     }
