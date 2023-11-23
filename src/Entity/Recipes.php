@@ -355,10 +355,8 @@ class Recipes
         $metadata->addPropertyConstraint('title', new Length(['min' => 3, 'max' => 50]));
         $metadata->addPropertyConstraint('title',  new Assert\Regex(['pattern' => '/^[a-zA-Z0-9]+$/']));
         $metadata->addPropertyConstraint('description', new NotBlank());
-        $metadata->addPropertyConstraint('description', new Length(['min' => 3, 'max' => 500]));
         $metadata->addPropertyConstraint('description',  new Assert\Regex(['pattern' => '/^[a-zA-Z0-9]+$/']));
         $metadata->addPropertyConstraint('steps', new NotBlank());
-        $metadata->addPropertyConstraint('steps', new Length(['min' => 3, 'max' => 500]));
         $metadata->addPropertyConstraint('steps',  new Assert\Regex(['pattern' => '/^[a-zA-Z0-9]+$/']));
         $metadata->addPropertyConstraint('PreparationTime', new NotBlank());
         $metadata->addPropertyConstraint('PreparationTime', new Length(['min' => 3, 'max' => 50]));
