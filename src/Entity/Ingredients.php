@@ -87,8 +87,8 @@ class Ingredients
     {
         $metadata->addPropertyConstraint('name', new NotBlank());
         $metadata->addPropertyConstraint('name', new Assert\Regex([
-            'pattern' => '/^[a-zA-Z0-9\s]+$/',
-            'message' => 'Votre message d\'erreur ici si la contrainte n\'est pas respectée.'
+            'pattern' => '/^[a-zA-Z0-9\sÀ-ÖØ-öø-ÿ-]+$/u',
+            'message' => 'usage des chiffre et lettre uniquement'
         ]));
     }
 }
