@@ -88,7 +88,9 @@ class DietTypes
     }
     public static function loadValidatorMetadata(ClassMetadata $metadata): void
     {
-        $metadata->addPropertyConstraint('type', new NotBlank());
-        $metadata->addPropertyConstraint('type',  new Assert\Regex(['pattern' => '/^[a-zA-Z0-9]+$/']));
-    }
+        $metadata->addPropertyConstraint('name', new NotBlank());
+        $metadata->addPropertyConstraint('name', new Assert\Regex([
+            'pattern' => '/^[a-zA-Z0-9\s]+$/',
+            'message' => 'Votre message d\'erreur ici si la contrainte n\'est pas respectée.'
+        ]));    }
 }
