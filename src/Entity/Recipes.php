@@ -353,7 +353,7 @@ class Recipes
     {
         $metadata->addPropertyConstraint('title', new NotBlank());
         $metadata->addPropertyConstraint('title', new Length(['min' => 3, 'max' => 50]));
-        $metadata->addPropertyConstraint('title',  new Assert\Regex(['pattern' => '/^[a-zA-Z0-9\sÀ-ÖØ-öø-ÿ-]+$/u',]));
+        $metadata->addPropertyConstraint('title',  new Assert\Regex(['pattern' => '/^[a-zA-Z0-9\sÀ-ÖØ-öø-ÿ.\'-]+$/u',]));
         $metadata->addPropertyConstraint('PreparationTime',  new Assert\Regex(['pattern' => '/^[a-zA-Z0-9\-]+$/',
         'message' => 'La valeur ne doit contenir que des lettres, des chiffres ou des tirets (-).',
     ]));

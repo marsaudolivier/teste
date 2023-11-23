@@ -91,7 +91,7 @@ class Allergens
     {
         $metadata->addPropertyConstraint('name', new NotBlank());
         $metadata->addPropertyConstraint('name', new Assert\Regex([
-            'pattern' => '/^[a-zA-Z0-9\sÀ-ÖØ-öø-ÿ-]+$/u',
+            'pattern' => '/^[a-zA-Z0-9\sÀ-ÖØ-öø-ÿ.\'-]+$/u',
             'message' => 'usage des chiffre et lettre uniquement'
         ]));    }
 }
