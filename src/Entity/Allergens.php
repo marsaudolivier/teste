@@ -90,7 +90,6 @@ class Allergens
     public static function loadValidatorMetadata(ClassMetadata $metadata): void
     {
         $metadata->addPropertyConstraint('type', new NotBlank());
-        $metadata->addPropertyConstraint('type', new Length(['min' => 3, 'max' => 50]));
         $metadata->addPropertyConstraint('type',  new Assert\Regex(['pattern' => '/^[a-zA-Z0-9]+$/']));
     }
 }

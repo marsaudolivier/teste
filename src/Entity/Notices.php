@@ -84,7 +84,6 @@ class Notices
     public static function loadValidatorMetadata(ClassMetadata $metadata): void
     {
         $metadata->addPropertyConstraint('comment', new NotBlank());
-        $metadata->addPropertyConstraint('comment', new Length(['min' => 3, 'max' => 50]));
         $metadata->addPropertyConstraint('comment',  new Assert\Regex(['pattern' => '/^[a-zA-Z0-9]+$/']));
         $metadata->addPropertyConstraint('note', new NotBlank());
         $metadata->addPropertyConstraint('note', new Assert\Range([
