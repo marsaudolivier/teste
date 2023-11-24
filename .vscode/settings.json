@@ -1,4 +1,5 @@
 {
     "appService.defaultWebAppToDeploy": "/subscriptions/9b786f47-9cec-487c-a45d-3acbc2d609ba/resourceGroups/cougies79700_rg_2654/providers/Microsoft.Web/sites/white-stone-3ad0157a4de041d1acaaa0cab20a11f8",
-    "appService.deploySubpath": "."
+    "appService.deploySubpath": ".",
+    "editor.inlineSuggest.showToolbar": "always"
 }
