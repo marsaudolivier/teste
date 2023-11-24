@@ -48,6 +48,12 @@ h4{
   -webkit-text-stroke: 1px $primary;
   padding: 5px;
 }
+h5{
+  color: $secondary;
+  font-size: 50px;
+  -webkit-text-stroke: 1px $primary;
+  padding: 5px;
+}
 //Footer style social link
 .social {
   width: 50px;
@@ -168,6 +174,9 @@ h4{
   }
   .recipe_title{
     font-size: 40px;
+  }
+  h5{
+    font-size: 30px;
   }
 }
 @media screen and (max-width: 600px) {
