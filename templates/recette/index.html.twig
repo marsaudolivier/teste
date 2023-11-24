@@ -18,7 +18,7 @@
 				{% endfor %}
 				{% if count > 0 %}
 					{# Total / nombre de note = note arrondie #}
-					<img id="globalRating" src="{{ asset('images/etoile' ~ (total / count) | round ~ '.svg') }}" alt="Logo" class="align-self-center">
+					<img id="globalRating" src="{{ asset('images/etoile' ~ (total / count) | round ~ '.svg') }}" alt="Logo" class="align-self-center" width="350px">
 				{% endif %}
 				<div class="d-flex">
 					<div class="row text-center">
