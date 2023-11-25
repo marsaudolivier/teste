@@ -53,6 +53,7 @@ h5{
   font-size: 50px;
   -webkit-text-stroke: 1px $primary;
   padding: 5px;
+  text-transform: uppercase;
 }
 //Footer style social link
 .social {
@@ -156,6 +157,9 @@ h5{
   }
   h3{
     font-size: 20px;
+  }
+  h5{
+    font-size: 27px;
   }
 }
 
