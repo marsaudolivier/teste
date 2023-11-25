@@ -23,6 +23,7 @@ class ContactController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()){
             $entityManager->persist($contact);
             $entityManager->flush();
+            $this->addFlash('success', 'Le formulaire de contact a été soumis avec succès!');
         }
         return $this->render('contact/index.html.twig', [    
             'form' => $form->createView(),  
